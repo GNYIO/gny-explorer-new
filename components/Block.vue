@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <h4 class="card-title">
-      Blocks
+      Latest Blocks
     </h4>
 
     <el-table @row-click="blockRowClick" :data="blocks" stripe v-loading="blocksLoading">
