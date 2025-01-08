@@ -54,6 +54,8 @@ const { data, error, status, } = await useAsyncData(async () => {
                 <basic :blocksCount="data.blocksCount" :transactions="data.transactions"
                     :latestHeight="data.latestHeight"></basic>
 
+                <block :blocks="data.blocks" :blocksLoading="status !== 'success'"></block>
+
             </div>
             <div v-if="error"> Error {{ error.message }} </div>
         </div>
