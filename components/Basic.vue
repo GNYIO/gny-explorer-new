@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body shadow">
+  <el-card>
     <h4 class="card-title">
       Basic
     </h4>
@@ -48,7 +48,7 @@
         <p v-if="burned">{{ burned }} GNY</p>
       </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 

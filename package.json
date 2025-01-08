@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@element-plus/nuxt": "^1.1.1",
     "@gnyio/client": "^2.12.0",
     "bignumber.js": "^9.1.2",
     "element-plus": "^2.9.2",
