@@ -19,15 +19,15 @@
       </div>
       <div>
         Delegates
-        <br v-if="dalegates === ''">
-        <i v-if="dalegates === ''" class="el-icon-loading"></i>
-        <p v-if="dalegates">{{ dalegates }}</p>
+        <br v-if="data.delegates === ''">
+        <i v-if="data.delegates === ''" class="el-icon-loading"></i>
+        <p v-if="data.delegates">{{ data.delegates }}</p>
       </div>
       <div>
         Accounts
-        <br v-if="accounts === ''">
-        <i v-if="accounts === ''" class="el-icon-loading"></i>
-        <p v-if="accounts">{{ accounts }}</p>
+        <br v-if="data.accounts === ''">
+        <i v-if="data.accounts === ''" class="el-icon-loading"></i>
+        <p v-if="data.accounts">{{ data.accounts }}</p>
       </div>
       <div>
         Latest block height
@@ -37,15 +37,15 @@
       </div>
       <div>
         Current Supply
-        <br v-if="supply === ''">
-        <i v-if="supply === ''" class="el-icon-loading"></i>
-        <p v-if="supply">{{ supply }} GNY</p>
+        <br v-if="data.supply === ''">
+        <i v-if="data.supply === ''" class="el-icon-loading"></i>
+        <p v-if="data.supply">{{ data.supply }} GNY</p>
       </div>
       <div>
         Burned Supply
-        <br v-if="burned === ''">
-        <i v-if="burned === ''" class="el-icon-loading"></i>
-        <p v-if="burned">{{ burned }} GNY</p>
+        <br v-if="data.burned === ''">
+        <i v-if="data.burned === ''" class="el-icon-loading"></i>
+        <p v-if="data.burned">{{ data.burned }} GNY</p>
       </div>
     </div>
   </el-card>
@@ -54,8 +54,43 @@
 
 
 <script setup>
+import BigNumber from 'bignumber.js';
 
 defineProps(['blocksCount', 'transactions', 'latestHeight'])
+
+const connection = useFoo();
+
+const { data, error, status } = await useAsyncData(async () => {
+
+  const delegatesRaw = await connection.value.api.Delegate.getDelegates()
+  if (!delegatesRaw.success) {
+    throw new Error('failed to fetch delegates totalCount');
+  }
+  const delegates = delegatesRaw.totalCount;
+
+
+  const accountsRaw = await connection.value.api.Account.countAccounts();
+  if (!accountsRaw.success) {
+    throw new Error('failed to fetch account count');
+  }
+  const accounts = accountsRaw.count;
+
+
+  const rawSupply = await connection.value.api.Block.getSupply();
+  if (!rawSupply.success) {
+    throw new Error('failed to fetch supply');
+  }
+
+  const supply = rawSupply.supply === String(0) ? String(0) : new BigNumber(rawSupply.supply).dividedBy(1e8).toFixed(0);
+  const burned = rawSupply.burned === String(0) ? String(0) : new BigNumber(rawSupply.burned).dividedBy(1e8).toFixed(0);
+
+  return {
+    delegates,
+    accounts,
+    supply,
+    burned,
+  };
+});
 
 </script>
 
