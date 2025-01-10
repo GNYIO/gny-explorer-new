@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card class="startpage-item">
     <h4 class="card-title">
       Latest Transactions
     </h4>
@@ -69,6 +69,11 @@ const width = 600;
 </script>
 
 <style scoped>
+
+.startpage-item {
+  margin-bottom: 30px;
+}
+
 .nuxt-link {
   color: #2475ba;
   cursor: pointer;

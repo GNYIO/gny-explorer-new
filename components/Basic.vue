@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card class="startpage-item">
     <h4 class="card-title">
       Basic
     </h4>
@@ -95,6 +95,11 @@ const { data, error, status } = await useAsyncData(async () => {
 </script>
 
 <style scoped>
+
+.startpage-item {
+  margin-bottom: 30px;
+}
+
 p {
   color: #acacac;
 }
