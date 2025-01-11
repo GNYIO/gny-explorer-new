@@ -64,7 +64,7 @@ function timestamp2date(row: ITransaction, column: TableColumnCtx<ITransaction>)
   return moment.utc(slots.getRealTime(row.timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
 }
 
-const width = 600;
+const { width } = useWindowSize()
 
 </script>
 

@@ -17,7 +17,7 @@
                     </nuxt-link>
                 </template>
             </el-table-column>
-            <el-table-column prop="tid" align="center" width="120" label="Transaction ID">
+            <el-table-column prop="tid" align="center" width="130" label="Transaction ID">
                 <template #default="scope">
                     <nuxt-link class="nuxt-link" :to="{ name: 'transaction-detail', query: { id: scope.row.tid } }">
                         {{ scope.row.tid.slice(0, 8) }}
@@ -94,7 +94,7 @@ function subSenderId(row: IBurn, column: TableColumnCtx<IBurn>) {
 }
 
 
-const width = 600;
+const { width } = useWindowSize()
 </script>
 
 
