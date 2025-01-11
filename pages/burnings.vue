@@ -4,7 +4,7 @@
             Burnings
         </h4>
 
-        <el-table :data="burn" stripe height="500" v-loading="loading">
+        <el-table v-el-table-infinite-scroll="myHandler" :data="burn" stripe height="500" v-loading="loading">
             <el-table-column prop="amount" align="center" label="Amount" :formatter="formatAmount"></el-table-column>
             <el-table-column v-if="width > 300" width="100" prop="height" align="center"
                 label="Height"></el-table-column>
@@ -24,78 +24,72 @@
                     </nuxt-link>
                 </template>
             </el-table-column>
-
-            <!-- <infinite-loading slot="append" @infinite="infiniteHandler"
-                force-use-infinite-wrapper=".el-table__body-wrapper">
-                <div slot="no-more"></div>
-            </infinite-loading> -->
         </el-table>
     </el-card>
 </template>
 
 
 <script setup lang="ts">
+import { default as vElTableInfiniteScroll } from "el-table-infinite-scroll";
 
 import { BigNumber } from 'bignumber.js';
-import type { BurnWrapper, IBurn } from '@gnyio/interfaces';
+import type { IBurn } from '@gnyio/interfaces';
 import type { TableColumnCtx } from 'element-plus';
 import { ref } from 'vue'
 
 const connection = useFoo();
 
 const burn = ref<IBurn[]>([]);
-const limit = ref(100);
+const limit = ref(15);
 const offset = ref(0);
 const loaded = ref(0);
 const loading = ref(true);
 
-const { data, error, status } = await useAsyncData(async () => {
-    const burnRaw = await connection.value.api.Burn.getAll(limit.value, offset.value)
-    if (!burnRaw.success) {
-        throw new Error('failed to fetch burnings');
-    }
-    
-    burn.value.push(...burnRaw.burn);
-
-    loading.value = false;
-});
-
-
-// infiniteHandler: function ($state) {
-//         console.log('infiniteHandler');
-
-//         setTimeout(async () => {
-//             this.offset = this.loaded;
-
-//             console.log('offset', this.offset);
-
-//             try {
-//                 const burn = (await connection.api.Burn.getAll(this.limit, this.offset)).burn;
-//                 console.log(JSON.stringify(burn, null, 2));
-
-//                 this.burn.push(...burn);
-
-//                 if (this.burn.length >= 0) {
-//                     this.loading = false;
-//                 }
-
-//                 this.loaded += burn.length;
-//                 $state.loaded();
-//                 if (burn.length === 0) {
-//                     $state.complete();
-//                 }
-//             } catch (error) {
-//                 console.log(error.message);
-//                 $state.complete();
-//             }
-//         }, 100);
+// const { data, error, status } = await useAsyncData(async () => {
+//     const burnRaw = await connection.value.api.Burn.getAll(limit.value, offset.value)
+//     if (!burnRaw.success) {
+//         throw new Error('failed to fetch burnings');
 //     }
+
+//     burn.value.push(...burnRaw.burn);
+
+//     loading.value = false;
+// });
+
+
+async function myHandler() {
+    console.log('infiniteHandler');
+
+
+    try {
+        console.log(`limit: ${limit.value}, offset: ${offset.value}`);
+
+        const burnRaw = await connection.value.api.Burn.getAll(limit.value, offset.value)
+        if (!burnRaw.success) {
+            throw new Error('failed to fetch burnings');
+        }
+
+        burn.value.push(...burnRaw.burn);
+
+        if (burn.value.length >= 0) {
+            loading.value = false;
+        }
+
+        loaded.value += burnRaw.burn.length;
+        offset.value = loaded.value;
+
+
+
+    } catch (err: unknown) {
+        console.log(err);
+    }
+}
 
 function formatAmount(row: IBurn, column: TableColumnCtx<IBurn>) {
     return new BigNumber(row.amount).dividedBy(1e8).toFixed() + ' GNY';
 }
 
-function subSenderId (row: IBurn, column: TableColumnCtx<IBurn>) {
+function subSenderId(row: IBurn, column: TableColumnCtx<IBurn>) {
     return row.senderId.slice(0, 8);
 }
 
@@ -106,13 +100,12 @@ const width = 600;
 
 
 <style scoped>
-
 .card-title {
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1.2;
-  margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
 }
 
 .el-card {
