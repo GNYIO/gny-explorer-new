@@ -124,7 +124,7 @@
 
         <WhoVotedForMe v-if="data" :votedForAddress="data.delegate.address" />
 
-        <!-- <who-i-voted-for-component :addressOfVoter="address"></who-i-voted-for-component> -->
+        <WhoIVotedFor v-if="data" :addressOfVoter="data.delegate.address" />
 
     </div>
 </template>
@@ -138,19 +138,10 @@ import type { LocationQueryValue } from 'vue-router';
 import type { TableColumnCtx } from 'element-plus';
 
 
-// import WhoVotedForMeComponent from '../components/WhoVotedForMe.vue';
-// import WhoIVotedForComponent from '../components/WhoIVotedFor.vue';
-
-
-
 const route = useRoute();
 
 function subID(id: string) {
     return id.slice(0, 8);
-}
-
-function subDelegate(delegate: string) {
-    return delegate.slice(0, 8);
 }
 
 function timestamp2date(row: IBlock, column: TableColumnCtx<IBlock>) {
