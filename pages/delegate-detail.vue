@@ -108,8 +108,8 @@
                         </nuxt-link>
                     </template>
                 </el-table-column>
-                <el-table-column v-if="width >= 1200" prop="timestamp" align="center" label="Forged Time"
-                    :formatter="timestamp2date" width="160"></el-table-column>
+                <el-table-column v-if="width >= 300" prop="timestamp" align="center" label="Forged Time"
+                    :formatter="timestamp2date" width="190"></el-table-column>
                 <el-table-column v-if="width >= 800" prop="count" align="center" label="Transactions"
                     width="auto"></el-table-column>
                 <el-table-column v-if="width >= 800" prop="fees" align="center" label="Fees" :formatter="formatFees"
@@ -117,16 +117,8 @@
                 <el-table-column v-if="width >= 800" prop="reward" align="center" label="Reward"
                     :formatter="formatReward" width="80">
                 </el-table-column>
-                <el-table-column v-if="width >= 500" prop="delegate" align="center" label="Delegate" width="auto">
-                    <template #default="scope">
-                        <nuxt-link class="nuxt-link"
-                            :to="{ name: 'delegate-detail', query: { publicKey: scope.row.delegate } }">
-                            {{ subDelegate(scope.row.delegate) }}
-                        </nuxt-link>
-                    </template>
-                </el-table-column>
             </el-table>
-            <el-pagination :disabled="blocksAreLoading" v-model:current-page="currentPage" layout="prev, pager, next"
+            <el-pagination class="center-horizontally" :disabled="blocksAreLoading" v-model:current-page="currentPage" layout="prev, pager, next"
                 :total="blockData?.count" />
         </el-card>
 
@@ -365,5 +357,15 @@ const { width } = useWindowSize();
 .nuxt-link {
     color: #2475ba;
     cursor: pointer;
+}
+
+.center-horizontally {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+p {
+    color: #acacac;
 }
 </style>
