@@ -7,7 +7,7 @@
 
 
         <!-- v-loading="loading" -->
-        <el-table v-if="data" :data="data.voters" stripe>
+        <el-table :data="votersCropped" stripe v-loading="loading">
             <el-table-column prop="senderId" align="center" label="Address">
                 <template #default="scope">
                     <nuxt-link class="nuxt-link"
@@ -36,8 +36,12 @@
             </el-table-column>
         </el-table>
 
-        <!-- <el-pagination class="center-horizontally" v-model:current-page="currentPage" :page-size="5"
-            layout="prev, pager, next" :total="votersCount" /> -->
+        <el-pagination :disabled="loading"
+            class="center-horizontally"
+            v-model:current-page="currentPage"
+            :page-size="5"
+            layout="prev, pager, next"
+            :total="data?.votersCount" />
     </el-card>
 </template>
 
@@ -63,10 +67,14 @@ const propsAddressRef = ref(props.votedForAddress);
 
 
 
-
+const loading = ref(true);
+const currentPage = ref(1);
 
 // automatically re-runs when prop "votedForAddress" changes
 const { data, error, status } = await useAsyncData(async () => {
+
+    loading.value = true;
+
 
     const newAddress = propsAddressRef.value;
     console.log(`(WhoVotedForMe) address of voter changed to "${newAddress}"`);
@@ -105,6 +113,8 @@ const { data, error, status } = await useAsyncData(async () => {
 
     result.sort((a: ExplorerVoter, b: ExplorerVoter) => Number(a.height) - Number(b.height)); // mutates own reference
 
+    loading.value = false;
+
     return {
         voters: result,
         votersCount: result.length,
@@ -138,8 +148,8 @@ interface ExplorerVoter {
  * get all basic.vote transactions for this account that voted for "me"
  * because one can vote,unvote and then again vote for an account
  * we need to search for the last transaction
- * @param ownUsername 
- * @param account 
+ * @param ownUsername
+ * @param account
  */
 async function getVotingTransaction(ownUsername: string, account: IAccount) {
 
@@ -191,6 +201,21 @@ async function getVotingTransaction(ownUsername: string, account: IAccount) {
 
 const { width } = useWindowSize();
 
+
+
+const votersCropped = computed(() => {
+    const pageSize = 5;
+    const from = (currentPage.value - 1) * pageSize;
+    if (data.value) {
+        const result = data.value.voters.slice(from, from + pageSize);
+        return result;
+    }
+    
+    const empty: ExplorerVoter[] = [];
+    return empty;
+});
+
+
 </script>
 
 <style>
@@ -200,5 +225,11 @@ const { width } = useWindowSize();
     font-weight: 500;
     line-height: 1.2;
     margin-top: 0;
+}
+
+.center-horizontally {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
 }
 </style>
