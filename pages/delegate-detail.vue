@@ -122,7 +122,7 @@
                 :total="blockData?.count" />
         </el-card>
 
-        <!-- <who-voted-for-me-component :votedForAddress="address"></who-voted-for-me-component> -->
+        <WhoVotedForMe v-if="data" :votedForAddress="data.delegate.address" />
 
         <!-- <who-i-voted-for-component :addressOfVoter="address"></who-i-voted-for-component> -->
 
