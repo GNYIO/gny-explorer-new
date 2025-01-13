@@ -90,7 +90,8 @@
                 {{ data.blockTitle }}
             </h4>
 
-            <!-- <el-table :data="currentBlocks" stripe v-loading="loading">
+            <!-- v-loading="loading" -->
+            <el-table v-if="blockData" :data="blockData.blocks" stripe v-loading="blocksAreLoading">
                 <el-table-column prop="height" align="center" label="Height" width="auto">
                     <template #default="scope">
                         <nuxt-link class="nuxt-link"
@@ -98,33 +99,35 @@
                             {{ scope.row.height }}
                         </nuxt-link>
                     </template>
-</el-table-column>
-<el-table-column prop="id" align="center" label="Block ID" width="auto">
-    <template #default="scope">
+                </el-table-column>
+                <el-table-column prop="id" align="center" label="Block ID" width="auto">
+                    <template #default="scope">
                         <nuxt-link class="nuxt-link"
                             :to="{ name: 'block-detail', query: { height: scope.row.height } }">
                             {{ subID(scope.row.id) }}
                         </nuxt-link>
                     </template>
-</el-table-column>
-<el-table-column v-if="width >= 1200" prop="timestamp" align="center" label="Forged Time" :formatter="timestamp2date"
-    width="160"></el-table-column>
-<el-table-column v-if="width >= 800" prop="count" align="center" label="Transactions" width="auto"></el-table-column>
-<el-table-column v-if="width >= 800" prop="fees" align="center" label="Fees" :formatter="formatFees"
-    width="70"></el-table-column>
-<el-table-column v-if="width >= 800" prop="reward" align="center" label="Reward" :formatter="formatReward" width="75">
-</el-table-column>
-<el-table-column v-if="width >= 500" prop="delegate" align="center" label="Delegate" width="auto">
-    <template #default="scope">
+                </el-table-column>
+                <el-table-column v-if="width >= 1200" prop="timestamp" align="center" label="Forged Time"
+                    :formatter="timestamp2date" width="160"></el-table-column>
+                <el-table-column v-if="width >= 800" prop="count" align="center" label="Transactions"
+                    width="auto"></el-table-column>
+                <el-table-column v-if="width >= 800" prop="fees" align="center" label="Fees" :formatter="formatFees"
+                    width="70"></el-table-column>
+                <el-table-column v-if="width >= 800" prop="reward" align="center" label="Reward"
+                    :formatter="formatReward" width="80">
+                </el-table-column>
+                <el-table-column v-if="width >= 500" prop="delegate" align="center" label="Delegate" width="auto">
+                    <template #default="scope">
                         <nuxt-link class="nuxt-link"
                             :to="{ name: 'delegate-detail', query: { publicKey: scope.row.delegate } }">
                             {{ subDelegate(scope.row.delegate) }}
                         </nuxt-link>
                     </template>
-</el-table-column>
-</el-table>
-<el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="10"
-    layout="prev, pager, next" :total="blocksCount" align="center"></el-pagination> -->
+                </el-table-column>
+            </el-table>
+            <el-pagination :disabled="blocksAreLoading" v-model:current-page="currentPage" layout="prev, pager, next"
+                :total="blockData?.count" />
         </el-card>
 
         <!-- <who-voted-for-me-component :votedForAddress="address"></who-voted-for-me-component> -->
@@ -147,45 +150,8 @@ import type { TableColumnCtx } from 'element-plus';
 // import WhoIVotedForComponent from '../components/WhoIVotedFor.vue';
 
 
+
 const route = useRoute();
-
-watch(() => route.query.username, async (username: LocationQueryValue | LocationQueryValue[]) => {
-    console.log(`route: ?username= changed to: ${username}`);
-
-    if (typeof username === 'string') {
-        // await updatePage(username, null);
-    }
-});
-
-watch(() => route.query.publicKey, async (publicKey: LocationQueryValue | LocationQueryValue[]) => {
-    console.log(`route: ?publicKey= changed to :${publicKey}`);
-
-    if (typeof publicKey === 'string') {
-        // await updatePage(null, publicKey);
-    }
-});
-
-
-
-// return {
-//     address: '',
-//     delegate: {},
-//     publicKey: '',
-//     username: '',
-//     trs: '',
-//     rewards: '',
-//     blocksCount: 0,
-//     offset: 0,
-//     loading: true,
-//     currentBlocks: [],
-//     currentPage: 1,
-//     pageSize: 10,
-//     blockTitle: '',
-//     prettyBalance: '',
-//     prettyLockBalance: '',
-//     isLocked: false,
-//     lockHeight: '',
-// }
 
 function subID(id: string) {
     return id.slice(0, 8);
@@ -211,7 +177,6 @@ function formatFees(row: DelegateViewModel, column: TableColumnCtx<DelegateViewM
 
 
 
-const routeQuery = computed(() => route.query)
 
 const connection = useFoo();
 
@@ -225,6 +190,11 @@ function isString(arg: any): arg is LocationQueryValue {
     return false;
 }
 
+
+
+const routeQuery = computed(() => route.query)
+
+// automatically re-runs when the query part of the URL changes
 const { data, error, status } = await useAsyncData(async () => {
 
     const query = routeQuery.value;
@@ -287,28 +257,55 @@ const { data, error, status } = await useAsyncData(async () => {
         isLocked, // account
     };
 }, {
-    watch: [routeQuery]
+    watch: [routeQuery],
+    lazy: true,
 });
 
 
 
-// async function handleCurrentChange(currentPage: number) {
-//     this.loading = true;
 
-//     const from = (currentPage - 1) * this.pageSize;
-//     const query = {
-//         limit: this.pageSize,
-//         offset: from,
-//         publicKey: this.publicKey,
-//     };
-//     console.log(JSON.stringify(query));
-//     const downloadedBlocks = (await connection.value.api.Delegate.ownProducedBlocks(query)).blocks;
-//     console.log(`length: ${downloadedBlocks.length}`);
-//     this.currentBlocks = [];
-//     this.currentBlocks = downloadedBlocks;
+// pagination
+const currentPage = ref(1);
+const delegatePublicKey = computed(() => data.value?.delegate.publicKey);
+const blocksAreLoading = ref(true);
 
-//     this.loading = false;
-// }
+const { data: blockData, error: blockError, status: blockStatus } = await useAsyncData(async () => {
+
+    blocksAreLoading.value = true;
+
+    console.log(`delegatePublicKey: ${JSON.stringify(delegatePublicKey.value, null, 2)}`)
+
+    // what to do if there is no publicKey ?
+    if (!delegatePublicKey.value) {
+        throw new Error('delegatePublicKey is not defined');
+    }
+
+    const pageSize = 10;
+
+    const offset = (currentPage.value - 1) * pageSize;
+    const query = {
+        limit: pageSize,
+        offset: offset,
+        publicKey: delegatePublicKey.value,
+    };
+
+    const blocksRaw = await connection.value.api.Delegate.ownProducedBlocks(query);
+    if (!blocksRaw.success) {
+        throw new Error('failed to fetch blocks of delegate');
+    }
+
+    blocksAreLoading.value = false;
+
+    return {
+        blocks: blocksRaw.blocks,
+        // @ts-ignore
+        count: blocksRaw.count
+    };
+}, {
+    // todo refactor use of "delegatePublicKey" (export to own component)
+    watch: [currentPage, delegatePublicKey],
+    lazy: true,
+});
 
 
 onMounted(async () => {
