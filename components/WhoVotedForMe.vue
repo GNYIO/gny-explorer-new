@@ -125,8 +125,7 @@ const { data, error, status } = await useAsyncData(async () => {
 });
 
 
-const formatTitle = computed(() => `Who Voted For Me (total: ${data.value?.votersCount})`);
-
+const formatTitle = computed(() => `Who Voted For Me ${data.value ? `(total: ${data.value.votersCount})` : ''} `);
 
 
 
