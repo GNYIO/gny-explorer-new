@@ -32,14 +32,40 @@
         </div>
         <div>
           Signature
-          <p>{{ data?.transaction.signatures.slice(0, 24) }} <i class="el-icon-copy-document"
-              @click="copySignature"></i>
+          <p>{{ data?.transaction.signatures.slice(0, 24) }}
+
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copySignature" class="copy-document" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
           </p>
+
+
         </div>
 
         <div>
           Transaction ID
-          <p>{{ data?.transaction.id.slice(0, 24) }} <i class="el-icon-copy-document" @click="copyId"></i></p>
+          <p>{{ data?.transaction.id.slice(0, 24) }}
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copyId" class="copy-document" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
+
+
+          </p>
         </div>
 
         <div>
@@ -54,15 +80,39 @@
 
         <div>
           Sender Public Key
-          <p>{{ data?.transaction.senderPublicKey.slice(0, 24) }}<i class="el-icon-copy-document"
-              @click="copySenderPublicKey"></i></p>
+          <p>{{ data?.transaction.senderPublicKey.slice(0, 24) }}
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copySenderPublicKey" class="copy-document" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
+          </p>
         </div>
 
 
         <div v-if="data?.transaction.secondSignature">
           Second Signature
-          <p>{{ data.transaction.secondSignature.slice(0, 24) }} <i class="el-icon-copy-document"
-              @click="copySecondSignature"></i> </p>
+          <p>{{ data.transaction.secondSignature.slice(0, 24) }}
+
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copySecondSignature" class="copy-document" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
+
+          </p>
         </div>
 
         <div v-if="data?.transaction.type === 0">
@@ -85,7 +135,21 @@
 
         <div v-if="data?.transaction.type === 2">
           Second Public Key
-          <p>{{ data.args[1].truncate(0, 24) }} <i class="el-icon-copy-document" @click="copySecondSenderPubilcKey"></i>
+          <p>{{ data.args[1].truncate(0, 24) }}
+
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copySecondSenderPubilcKey" class="copy-document" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
+
+
           </p>
         </div>
 
@@ -363,70 +427,57 @@ const formatTitle = computed(() => {
 
 
 
-// return {
-//   transaction: {
-//     id: '',
-//     height: '',
-//     timestamp: null,
-//     fee: null,
-//     type: null,
-//   },
-//   confirmation: '',
-//   confirmationText: '',
-//   date: '',
-//   args: [],
-//   username: '',
-//   voteList: '',
-//   amount: '',
-//   lockHeight: '',
-//   desc: '',
-//   maximum: '',
-//   precision: 0,
-//   currency: '',
-//   recipientId: '',
-//   secondPublicKey: '',
-//   message: '',
-//   burnedGNY: '',
-
+const { isSupported, copy } = useClipboard();
 
 async function copyId() {
-  try {
-    // await this.$copyText(this.transaction.id);
-  } catch (e) {
-    console.error(e);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data.value?.transaction.id || '';
+  await copy(result);
 }
 
 
 async function copySignature() {
-  try {
-    // await this.$copyText(JSON.stringify(this.transaction.signatures));
-  } catch (e) {
-    console.error(e);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data.value?.transaction.signatures || '';
+  await copy(result);
 }
 
 async function copySecondSignature() {
-  try {
-    // await this.$copyText(JSON.stringify(this.transaction.secondSignature));
-  } catch (e) {
-    console.error(e);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data.value?.transaction.secondSignature || '';
+  await copy(result);
 }
+
 async function copySenderPublicKey() {
-  try {
-    // await this.$copyText(this.transaction.senderPublicKey);
-  } catch (e) {
-    console.error(e);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data.value?.transaction.senderPublicKey || '';
+  await copy(result);
+
 }
 
 async function copySecondSenderPubilcKey() {
-
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
+  }
+  const result = data.value?.args[0] || '';
+  await copy(result);
 }
 
 function timestamp2date(row: ITransaction) {
-    return moment.utc(slots.getRealTime(row.timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
+  return moment.utc(slots.getRealTime(row.timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
 }
 
 </script>
@@ -467,16 +518,20 @@ p {
   cursor: pointer;
 }
 
-.el-icon-copy-document {
-  transition: 0.1s;
-  transition-property: color;
+.copy-document {
+    width: 20px;
 }
 
-.el-icon-copy-document:hover {
-  color: #565656;
+.copy-document:hover {
+    cursor: pointer;
 }
 
-.el-icon-copy-document:active {
-  color: black;
+.copy-document:hover path {
+    fill: #565656;
 }
+
+.copy-document:active path {
+    fill: #000;
+}
+
 </style>
