@@ -9,8 +9,21 @@
                 <div>
                     Block ID
                     <p>
-                        {{ data?.block.id.slice(0, 8) }} <i class="el-icon-copy-document" @click="copyId"></i>
+                        {{ data?.block.id.slice(0, 8) }}
+
+                        <!-- svg of element-plus "CopyDocumnet" icon-->
+                        <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+                        <svg class="copy-document" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"
+                            @click="copyId">
+                            <path fill="currentColor"
+                                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+                            </path>
+                            <path fill="currentColor"
+                                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+                            </path>
+                        </svg>
                     </p>
+
                 </div>
                 <div :span="8">
                     Height
@@ -144,13 +157,19 @@ const { data, error, status } = await useAsyncData(async () => {
 });
 
 
+const {
+    isSupported,
+    copy,
+} = useClipboard();
 
+// https://vueuse.org/core/useClipboard/
 async function copyId() {
-    try {
-        // await $copyText(this.block.id);
-    } catch (e) {
-        console.error(e);
+    if (!isSupported) {
+        console.log('copying to clipboard is ont supported');
+        return;
     }
+    const result = data.value?.block.id || '';
+    await copy(result);
 }
 
 /**
@@ -210,16 +229,19 @@ p {
     cursor: pointer;
 }
 
-.el-icon-copy-document {
-    transition: 0.1s;
-    transition-property: color;
+.copy-document {
+    width: 20px;
 }
 
-.el-icon-copy-document:hover {
-    color: #565656;
+.copy-document:hover {
+    cursor: pointer;
 }
 
-.el-icon-copy-document:active {
-    color: black;
+.copy-document:hover path {
+    fill: #565656;
+}
+
+.copy-document:active path {
+    fill: #000;
 }
 </style>
