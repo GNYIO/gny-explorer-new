@@ -281,7 +281,6 @@ const { data: blockData, error: blockError, status: blockStatus } = await useAsy
 
     return {
         blocks: blocksRaw.blocks,
-        // @ts-ignore
         count: blocksRaw.count
     };
 }, {

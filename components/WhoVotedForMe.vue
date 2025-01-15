@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import BigNumber from 'bignumber.js';
-import type { IAccount, ITransaction } from '@gnyio/interfaces';
+import type { IAccount, ITransaction, UnconfirmedTransaction } from '@gnyio/interfaces';
 import type { TableColumnCtx } from 'element-plus';
 
 const connection = useFoo();
@@ -162,7 +162,7 @@ async function getVotingTransaction(ownUsername: string, account: IAccount) {
 
     // because someone could have more than 100 transactions
     // we should loop through all paged transactions
-    let transactions: ITransaction[] = [];
+    let transactions: Array<ITransaction | UnconfirmedTransaction>  = [];
     while (true) {
         const temp = await connection.value.api.Transaction.getTransactions(query);
         if (!temp.success) {
@@ -171,7 +171,6 @@ async function getVotingTransaction(ownUsername: string, account: IAccount) {
 
         transactions.push(...temp.transactions);
 
-        // @ts-ignore
         if (temp.count > transactions.length) {
             query.offset += 100;
         } else {
