@@ -95,12 +95,9 @@
 </template>
 
 <script setup lang="ts">
-import moment from 'moment';
-import { slots } from '@gnyio/utils';
 import BigNumber from 'bignumber.js';
 import type { DelegateViewModel, IAccount, IBlock } from '@gnyio/interfaces';
 import type { LocationQueryValue } from 'vue-router';
-import type { TableColumnCtx } from 'element-plus';
 import DelegateProducedBlocks from '~/components/DelegateProducedBlocks.vue';
 
 
