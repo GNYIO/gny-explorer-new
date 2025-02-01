@@ -67,9 +67,9 @@
 
         <WhoIVotedFor v-if="data" :addressOfVoter="data.account.address" />
 
-        <!--
-        <burnings-component :senderAddress="address"></burnings-component>
+        <AccountBurnings v-if="data" :senderAddress="data?.account.address" />
 
+        <!--
         <dat-makers-component :address="address"></dat-makers-component>
 
         <dats-component :ownerAddress="address"></dats-component> -->
@@ -80,6 +80,7 @@
 import BigNumber from 'bignumber.js';
 import type { IAccount } from '@gnyio/interfaces';
 import TransactionsISent from '~/components/TransactionsISent.vue';
+import AccountBurnings from './AccountBurnings.vue';
 
 // import TransactionsISentComponent from '../components/TransactionsISent.vue';
 // import WhoIVotedForComponent from '../components/WhoIVotedFor.vue';
