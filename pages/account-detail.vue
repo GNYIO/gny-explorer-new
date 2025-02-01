@@ -69,9 +69,9 @@
 
         <AccountBurnings v-if="data" :senderAddress="data?.account.address" />
 
-        <!--
-        <dat-makers-component :address="address"></dat-makers-component>
+        <AccountDatMakers v-if="data" :address="data?.account.address" />
 
+        <!--
         <dats-component :ownerAddress="address"></dats-component> -->
     </div>
 </template>
