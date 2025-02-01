@@ -52,7 +52,6 @@ const connection = useFoo()
 
 const { data, status, error } = await useAsyncData(async () => {
 
-
     const val = address.value;
     if (!val) {
         throw new Error('[AccountDatMaker] prop address is undefined');
@@ -65,6 +64,8 @@ const { data, status, error } = await useAsyncData(async () => {
     if (!raw.success) {
         throw new Error('[AccountDatMaker] could get DAT Makers');
     }
+
+    console.log(`dats: ${JSON.stringify(raw, null, 2)}`);
 
     return {
         makers: raw.makers,

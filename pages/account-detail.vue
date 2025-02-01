@@ -62,7 +62,7 @@
         <CustomAssets v-if="data" :senderAddress="data.account.address" />
 
         <TransactionsISent v-if="data" :senderAddress="data.account.address" />
-   
+
         <AssetTransfers v-if="data" :senderAddress="data.account.address" />
 
         <WhoIVotedFor v-if="data" :addressOfVoter="data.account.address" />
@@ -71,8 +71,7 @@
 
         <AccountDatMakers v-if="data" :address="data?.account.address" />
 
-        <!--
-        <dats-component :ownerAddress="address"></dats-component> -->
+        <AccountDats v-if="data" :ownerAddress="data?.account.address" />
     </div>
 </template>
 
