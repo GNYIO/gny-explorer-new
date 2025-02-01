@@ -109,5 +109,12 @@ function formatFees(row: DelegateViewModel, column: TableColumnCtx<DelegateViewM
 }
 
 const { width } = useWindowSize();
-
 </script>
+
+<style scoped>
+.center-horizontally {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+</style>

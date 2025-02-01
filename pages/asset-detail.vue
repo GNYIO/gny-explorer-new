@@ -56,7 +56,7 @@
 
     <AssetIssueTransactions v-if="data" :issuerId="data?.asset.issuerId" />
 
-    <AssetTransfers v-if="data" :assetName="data?.asset.name" />
+    <UiaAssetTransfers v-if="data" :assetName="data?.asset.name" />
 
     <AssetCurrentHolders v-if="data" :assetName="data?.asset.name" />
 

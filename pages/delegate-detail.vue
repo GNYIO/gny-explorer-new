@@ -224,12 +224,6 @@ const { data, error, status } = await useAsyncData(async () => {
     cursor: pointer;
 }
 
-.center-horizontally {
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-}
-
 p {
     color: #acacac;
 }

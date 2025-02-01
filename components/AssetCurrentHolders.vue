@@ -18,12 +18,8 @@
                 width="auto"></el-table-column>
         </el-table>
 
-        <el-pagination :disabled="status !== 'success'"
-            class="center-horizontally"
-            v-model:current-page="currentPage"
-            :page-size="5"
-            layout="prev, pager, next"
-            :total="data?.count" />
+        <el-pagination :disabled="status !== 'success'" class="center-horizontally" v-model:current-page="currentPage"
+            :page-size="5" layout="prev, pager, next" :total="data?.count" />
 
     </el-card>
 </template>
@@ -90,13 +86,17 @@ const { width } = useWindowSize();
 
 
 <style>
-
 .card-title {
     margin-bottom: 0.75rem;
     font-size: 1.5rem;
     font-weight: 500;
     line-height: 1.2;
     margin-top: 0;
-  }
+}
 
+.center-horizontally {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
 </style>

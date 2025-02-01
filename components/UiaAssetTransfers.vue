@@ -121,7 +121,7 @@ const { width } = useWindowSize();
 </script>
 
 
-<style>
+<style scoped>
 
 .card-title {
     margin-bottom: 0.75rem;
@@ -131,4 +131,9 @@ const { width } = useWindowSize();
     margin-top: 0;
   }
 
+.center-horizontally {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
 </style>
