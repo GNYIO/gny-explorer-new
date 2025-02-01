@@ -57,12 +57,13 @@
             </div>
         </el-card>
 
-        <!-- <visualization-component :address="address"></visualization-component>
+        <!-- <visualization-component :address="address"></visualization-component> -->
 
-        <custom-assets-component :senderAddress="address"></custom-assets-component>
+        <!-- <custom-assets-component :senderAddress="address"></custom-assets-component> -->
 
-        <transactions-i-sent-component :senderAddress="address"></transactions-i-sent-component>
-
+        <TransactionsISent v-if="data" :senderAddress="data.account.address" />
+   
+        <!--
         <asset-transfers-component :senderAddress="address"></asset-transfers-component>
 
         <who-i-voted-for-component :addressOfVoter="address"></who-i-voted-for-component>
@@ -78,6 +79,7 @@
 <script setup lang="ts">
 import BigNumber from 'bignumber.js';
 import type { IAccount } from '@gnyio/interfaces';
+import TransactionsISent from '~/components/TransactionsISent.vue';
 
 // import TransactionsISentComponent from '../components/TransactionsISent.vue';
 // import WhoIVotedForComponent from '../components/WhoIVotedFor.vue';
