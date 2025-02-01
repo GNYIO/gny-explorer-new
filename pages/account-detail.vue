@@ -63,8 +63,9 @@
 
         <TransactionsISent v-if="data" :senderAddress="data.account.address" />
    
+        <AssetTransfers v-if="data" :senderAddress="data.account.address" />
+
         <!--
-        <asset-transfers-component :senderAddress="address"></asset-transfers-component>
 
         <who-i-voted-for-component :addressOfVoter="address"></who-i-voted-for-component>
 
