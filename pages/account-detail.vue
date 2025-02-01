@@ -59,7 +59,7 @@
 
         <!-- <visualization-component :address="address"></visualization-component> -->
 
-        <!-- <custom-assets-component :senderAddress="address"></custom-assets-component> -->
+        <CustomAssets v-if="data" :senderAddress="data.account.address" />
 
         <TransactionsISent v-if="data" :senderAddress="data.account.address" />
    
