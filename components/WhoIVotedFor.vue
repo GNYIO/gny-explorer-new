@@ -45,7 +45,7 @@ import type { IDelegate } from '@gnyio/interfaces';
 import type { TableColumnCtx } from 'element-plus';
 
 
-const formatTitle = computed(() => `Who I Voted For ${data.value ? `(total: ${data.value.count})` : ''})`);
+const formatTitle = computed(() => `Who I Voted For ${data.value ? `(total: ${data.value.count}` : ''})`);
 
 const connection = useFoo();
 

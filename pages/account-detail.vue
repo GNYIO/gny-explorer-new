@@ -65,10 +65,9 @@
    
         <AssetTransfers v-if="data" :senderAddress="data.account.address" />
 
+        <WhoIVotedFor v-if="data" :addressOfVoter="data.account.address" />
+
         <!--
-
-        <who-i-voted-for-component :addressOfVoter="address"></who-i-voted-for-component>
-
         <burnings-component :senderAddress="address"></burnings-component>
 
         <dat-makers-component :address="address"></dat-makers-component>
