@@ -26,7 +26,7 @@
           <p>
             <nuxt-link :to="{ name: 'dat-detail', query: { hash: data.dat.previousHash } }">{{
               data.dat.previousHash.slice(0, 16)
-              }}</nuxt-link>
+            }}</nuxt-link>
           </p>
         </div>
         <div v-else>
@@ -53,14 +53,14 @@
           <p v-if="data">
             <nuxt-link :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{
               data.dat.datMakerId
-              }}</nuxt-link>
+            }}</nuxt-link>
           </p>
         </div>
 
         <!-- use v-if otherwise when loading one can see for a split second "undefined" -->
-        <div v-if="data?.dat.counter">
+        <div v-if="data?.dat">
           Chronological order position
-          <p><strong>{{ data.dat.counter | ordinal }}</strong> DAT from <nuxt-link
+          <p><strong>{{ ordinal(data.dat.counter || 1) }}</strong> DAT from <nuxt-link
               :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{ data.dat.datMakerId
               }}</nuxt-link>
           </p>
@@ -71,7 +71,7 @@
           <p v-if="data">
             <nuxt-link :to="{ name: 'account-detail', query: { address: data.dat.ownerAddress } }">{{
               data.dat.ownerAddress
-              }}</nuxt-link>
+            }}</nuxt-link>
           </p>
         </div>
 
@@ -96,10 +96,9 @@
         </div>
 
         <div>
-          <el-tooltip v-if="showError === false && showSuccess === false" effect="dark" placement="bottom">
+          <!-- <el-tooltip v-if="showError === false && showSuccess === false" effect="dark" placement="bottom">
             <div slot="content">Click to verify this DAT.<br /> Use at your own risk!</div>
 
-            <!-- setting the "border-width" to "0px" fixes a bug where the border of the button overflows the el-loading-mask css class -->
             <el-button style="font-size: 53px; border-width: 0px;" @click="verify" type="warning"
               icon="el-icon-question" circle v-loading="buttonLoading"></el-button>
           </el-tooltip>
@@ -115,7 +114,7 @@
 
             <el-button style="font-size: 53px;" v-if="showSuccess === true" type="success" icon="el-icon-check"
               circle></el-button>
-          </el-tooltip>
+          </el-tooltip> -->
         </div>
 
       </div>
@@ -127,11 +126,11 @@
       </h4>
 
 
-      <el-steps simple>
+      <el-steps simple v-if="data">
 
-        <el-step v-for="row in rows" :status="typeof row.hash === 'string' ? 'success' : 'wait'" icon="el-icon-upload"
+        <el-step v-for="row in data.rows" :status="typeof row.hash === 'string' ? 'success' : 'wait'" :icon="Check"
           v-bind:key="row.counter">
-          <div slot="title">
+          <template #title>
 
             <span v-if="row.hash && row.current">
               <strong>DAT &#35;{{ row.counter }}</strong>
@@ -142,7 +141,13 @@
 
             <span v-if="!row.hash">not minted yet</span>
 
-          </div>
+          </template>
+
+          <!--show this "UploadFillec" icon only if the doesnt exist yet-->
+          <template v-if="!row.hash" #icon>
+            <UploadFilled />
+          </template>
+
         </el-step>
 
       </el-steps>
@@ -156,11 +161,11 @@ import moment from 'moment';
 import { slots } from '@gnyio/utils';
 import axios from 'axios';
 import * as webEd from '@gnyio/web-ed';
+import { Edit, Picture, UploadFilled, Upload, Check } from '@element-plus/icons-vue'
 
-
-const custom_title: string = computed(() => {
-  if (data && typeof data.dat.name === 'string') {
-    const last = data.dat.name.split('.')[1];
+const custom_title = computed(() => {
+  if (data.value && typeof data.value.dat.name === 'string') {
+    const last = data.value.dat.name.split('.')[1];
 
     if (last.length > 20) {
       const lastShort = last.slice(0, 20) + '...';
@@ -203,18 +208,18 @@ const { data, error, status } = await useAsyncData(async () => {
 
   // https://dushkin.tech/posts/js_assign_variable_in_switch/
   const dat = await (async function () {
-    if (isString(potentialHash)) {
+    if (typeof potentialHash === 'string') {
       const raw = await connection.value.api.Dat.getSingleDat({
-        hash: potentialHash,
+        hash: String(potentialHash),
       });
       if (raw.success) {
         return raw.dat;
       }
     }
 
-    if (isString(potentialName)) {
+    if (typeof potentialName === 'string') {
       const raw = await connection.value.api.Dat.getSingleDat({
-        name: potentialName,
+        name: String(potentialName),
       });
       if (raw.success) {
         return raw.dat;
@@ -225,7 +230,7 @@ const { data, error, status } = await useAsyncData(async () => {
   })();
 
 
-  const rawMaker = await connection.api.Dat.getSingleDatMaker(dat.datMakerId);
+  const rawMaker = await connection.value.api.Dat.getSingleDatMaker(dat.datMakerId);
   if (!rawMaker.success) {
     throw new Error('failed to fetch DATMaker of DAT');
   }
@@ -233,7 +238,7 @@ const { data, error, status } = await useAsyncData(async () => {
 
   // try to get next hash
   console.log(`counter: ${dat.counter}`);
-  const nextHashRaw = await connection.api.Dat.getDats({
+  const nextHashRaw = await connection.value.api.Dat.getDats({
     maker: dat.datMakerId,
     limit: 1,
     offset: Number(dat.counter),
@@ -278,6 +283,8 @@ const { data, error, status } = await useAsyncData(async () => {
     });
   }
 
+  console.log(`rows: ${JSON.stringify(rows, null, 2)}`);
+
   return {
     dat,
     nextHash,
@@ -298,136 +305,154 @@ const buttonLoading = ref(false);
 
 async function copyName() {
   try {
-    await this.$copyText(this.dat.name);
+    // await this.$copyText(this.dat.name);
   } catch (err) {
-    console.error(e);
+    console.error(err);
   }
 }
 
 async function copyHash() {
   try {
-    await this.$copyText(this.dat.hash);
+    // await this.$copyText(this.dat.hash);
   } catch (err) {
-    console.error(e);
+    console.error(err);
   }
 }
 
 async function copyDatUrl() {
   try {
-    await this.$copyText(this.dat.url);
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-async function verify() {
-  this.buttonLoading = true;
-
-  console.log('verifing DAT...');
-
-  let result = null;
-  try {
-    console.log(`url: ${this.dat.url}`);
-
-    result = await axios.request({
-      method: 'GET',
-      url: this.dat.url,
-      maxRedirects: 0, // do not redirect
-      // responseType: 'json',
-      crossDomain: true,
-      timeout: 5000,
-    });
-    console.log('finished request');
+    // await this.$copyText(this.dat.url);
   } catch (err) {
-
-    // error happens if domain does not exist or file can't be found
-    console.log('error during fetching json data (dat-detail)');
-    console.log(err);
-
-    this.showError = true;
-    this.errorText = 'File not found!';
-
-    // todo: show Notification popup
-    this.buttonLoading = false;
-    return;
+    console.error(err);
   }
-
-  console.log('after try block');
-
-
-  // validate structure of data
-  const validationResult = gnyClient.schemas.datSchema.validate(result.data);
-  if (!validationResult.result) {
-    this.showError = true;
-    this.errorText = 'Data is not in correct format';
-    this.buttonLoading = false;
-    return;
-  }
-
-  if (result.data.hash) { // is DATsha256
-    const data = result.data.data;
-    const hash = result.data.hash;
-
-    const ownHash = webEd.createSha256Hash(data);
-    if (hash !== ownHash) {
-      this.showError = true;
-      this.errorText = 'Data does not match the provided Hash!';
-      this.buttonLoading = false;
-      return;
-    } else {
-      this.showSuccess = true;
-      this.successText = 'Hashes are matching! Data has not changed.';
-      this.buttonLoading = false;
-      return;
-    }
-  } else { // is DATEd25519
-    const data = result.data.data;
-    const publicKey = result.data.publicKey;
-    const signature = result.data.signature;
-    try {
-      const result = gnyClient.verification.MessageWebBase.verify(
-        data,
-        signature,
-        publicKey
-      );
-      if (result) {
-        ths.showSuccess = true;
-        this.successText = 'Signature is correct. Data wasn\'t tampered with';
-        this.buttonLoading = false;
-        return;
-      } else {
-        this.showError = true;
-        this.errorText = 'ed25519 signature does not match';
-        this.buttonLoading = false;
-        return;
-      }
-    } catch (err) {
-      this.showError = true;
-      this.errorText = 'ed25519 not in correct format';
-      this.buttonLoading = false;
-      return;
-    }
-  }
-
 }
+
+// async function verify() {
+//   this.buttonLoading = true;
+
+//   console.log('verifing DAT...');
+
+//   let result = null;
+//   try {
+//     console.log(`url: ${this.dat.url}`);
+
+//     result = await axios.request({
+//       method: 'GET',
+//       url: this.dat.url,
+//       maxRedirects: 0, // do not redirect
+//       // responseType: 'json',
+//       crossDomain: true,
+//       timeout: 5000,
+//     });
+//     console.log('finished request');
+//   } catch (err) {
+
+//     // error happens if domain does not exist or file can't be found
+//     console.log('error during fetching json data (dat-detail)');
+//     console.log(err);
+
+//     this.showError = true;
+//     this.errorText = 'File not found!';
+
+//     // todo: show Notification popup
+//     this.buttonLoading = false;
+//     return;
+//   }
+
+//   console.log('after try block');
+
+
+//   // validate structure of data
+//   const validationResult = gnyClient.schemas.datSchema.validate(result.data);
+//   if (!validationResult.result) {
+//     this.showError = true;
+//     this.errorText = 'Data is not in correct format';
+//     this.buttonLoading = false;
+//     return;
+//   }
+
+//   if (result.data.hash) { // is DATsha256
+//     const data = result.data.data;
+//     const hash = result.data.hash;
+
+//     const ownHash = webEd.createSha256Hash(data);
+//     if (hash !== ownHash) {
+//       this.showError = true;
+//       this.errorText = 'Data does not match the provided Hash!';
+//       this.buttonLoading = false;
+//       return;
+//     } else {
+//       this.showSuccess = true;
+//       this.successText = 'Hashes are matching! Data has not changed.';
+//       this.buttonLoading = false;
+//       return;
+//     }
+//   } else { // is DATEd25519
+//     const data = result.data.data;
+//     const publicKey = result.data.publicKey;
+//     const signature = result.data.signature;
+//     try {
+//       const result = gnyClient.verification.MessageWebBase.verify(
+//         data,
+//         signature,
+//         publicKey
+//       );
+//       if (result) {
+//         ths.showSuccess = true;
+//         this.successText = 'Signature is correct. Data wasn\'t tampered with';
+//         this.buttonLoading = false;
+//         return;
+//       } else {
+//         this.showError = true;
+//         this.errorText = 'ed25519 signature does not match';
+//         this.buttonLoading = false;
+//         return;
+//       }
+//     } catch (err) {
+//       this.showError = true;
+//       this.errorText = 'ed25519 not in correct format';
+//       this.buttonLoading = false;
+//       return;
+//     }
+//   }
+
+// }
 
 function timestamp2date(timestamp: number) {
     return moment.utc(slots.getRealTime(timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
 }
 
+function ordinal(text: string) {
+  const str = String(text);
+  const lastChar = str[str.length - 1];
+  
+  if (str === '11') return '11th';
+  if (str === '12') return '12th';
+  if (str === '13') return '13th';
+
+  if (str === '1') return `${text}st`
+  if (str === '2') return `${text}nd`;
+  if (str === '3') return `${text}rd`;
+  
+  if (lastChar === '1') return `${text}st`;
+  if (lastChar === '2') return `${text}nd`;
+  if (lastChar === '3') return `${text}rd`;
+
+  return `${text}th`;
+}
+
 
 const { width } = useWindowSize();
-
 
 </script>
 
 <style scoped>
 .card-title {
-    margin-bottom: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1.2;
-    margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-top: 0;
 }
 
 i {
