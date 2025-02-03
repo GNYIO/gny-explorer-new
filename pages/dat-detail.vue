@@ -24,9 +24,9 @@
         <div v-if="data?.dat.previousHash">
           Previous Hash in chain
           <p>
-            <nuxt-link :to="{ name: 'dat-detail', query: { hash: data.dat.previousHash } }">{{
+            <NuxtLink :to="{ name: 'dat-detail', query: { hash: data.dat.previousHash } }">{{
               data.dat.previousHash.slice(0, 16)
-            }}</nuxt-link>
+            }}</NuxtLink>
           </p>
         </div>
         <div v-else>
@@ -37,9 +37,9 @@
         <div v-if="data?.nextHash.hash">
           Next Hash in chain
           <p>
-            <nuxt-link :to="{ name: 'dat-detail', query: { hash: data.nextHash.hash } }">{{ data.nextHash.hash.slice(0,
+            <NuxtLink :to="{ name: 'dat-detail', query: { hash: data.nextHash.hash } }">{{ data.nextHash.hash.slice(0,
               16)
-              }}</nuxt-link>
+              }}</NuxtLink>
           </p>
         </div>
         <div v-else>
@@ -51,35 +51,35 @@
         <div>
           DAT Maker
           <p v-if="data">
-            <nuxt-link :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{
+            <NuxtLink :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{
               data.dat.datMakerId
-            }}</nuxt-link>
+            }}</NuxtLink>
           </p>
         </div>
 
         <!-- use v-if otherwise when loading one can see for a split second "undefined" -->
         <div v-if="data?.dat">
           Chronological order position
-          <p><strong>{{ ordinal(data.dat.counter || 1) }}</strong> DAT from <nuxt-link
+          <p><strong>{{ ordinal(data.dat.counter || 1) }}</strong> DAT from <NuxtLink
               :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{ data.dat.datMakerId
-              }}</nuxt-link>
+              }}</NuxtLink>
           </p>
         </div>
 
         <div>
           Owner Address
           <p v-if="data">
-            <nuxt-link :to="{ name: 'account-detail', query: { address: data.dat.ownerAddress } }">{{
+            <NuxtLink :to="{ name: 'account-detail', query: { address: data.dat.ownerAddress } }">{{
               data.dat.ownerAddress
-            }}</nuxt-link>
+            }}</NuxtLink>
           </p>
         </div>
 
         <div>
           Minting Transaction
           <p v-if="data">
-            <nuxt-link :to="{ name: 'transaction-detail', query: { id: data.dat.tid } }">{{ data.dat.tid.slice(0, 16)
-              }}</nuxt-link>
+            <NuxtLink :to="{ name: 'transaction-detail', query: { id: data.dat.tid } }">{{ data.dat.tid.slice(0, 16)
+              }}</NuxtLink>
           </p>
         </div>
 
@@ -96,23 +96,27 @@
         </div>
 
         <div>
-          <!-- <el-tooltip v-if="showError === false && showSuccess === false" effect="dark" placement="bottom">
-            <div slot="content">Click to verify this DAT.<br /> Use at your own risk!</div>
+          <el-tooltip v-if="showError === false && showSuccess === false" effect="dark" placement="bottom">
+            <template #content>Click to verify this DAT.<br /> Use at your own risk!</template>
 
-            <el-button style="font-size: 53px; border-width: 0px;" @click="verify" type="warning"
-              icon="el-icon-question" circle v-loading="buttonLoading"></el-button>
+            <!-- v-loading="buttonLoading" -->
+            <el-button @click="verify" class="custom-button" type="warning" circle>
+              <template #icon>
+                  <QuestionFilled />
+              </template>
+            </el-button>
           </el-tooltip>
 
-          <el-tooltip v-if="showError" effect="dark" placement="bottom">
-            <div slot="content">{{ errorText }}</div>
-            <el-button style="font-size: 53px;" v-if="showError === true" type="danger" icon="el-icon-close"
+          <!-- <el-tooltip v-if="showError" effect="dark" placement="bottom">
+            <template #content>{{ errorText }}</template>
+            <el-button style="font-size: 53px;" v-if="showError === true" type="danger" :icon="Close"
               circle></el-button>
           </el-tooltip>
 
           <el-tooltip v-if="showSuccess" effect="dark" placement="bottom">
-            <div slot="content">{{ successText }}</div>
+            <template #content>{{ successText }}</template>
 
-            <el-button style="font-size: 53px;" v-if="showSuccess === true" type="success" icon="el-icon-check"
+            <el-button style="font-size: 53px;" v-if="showSuccess === true" type="success" :icon="Check"
               circle></el-button>
           </el-tooltip> -->
         </div>
@@ -128,24 +132,23 @@
 
       <el-steps simple v-if="data">
 
-        <el-step v-for="row in data.rows" :status="typeof row.hash === 'string' ? 'success' : 'wait'" :icon="Check"
-          v-bind:key="row.counter">
+        <el-step v-for="row in data.rows" :status="typeof row.hash === 'string' ? 'success' : 'wait'" v-bind:key="row.counter">
           <template #title>
-
             <span v-if="row.hash && row.current">
               <strong>DAT &#35;{{ row.counter }}</strong>
             </span>
 
-            <nuxt-link v-if="row.hash && !row.current" :to="{ name: 'dat-detail', query: { hash: row.hash } }">DAT
-              &#35;{{ row.counter }}</nuxt-link>
+            <NuxtLink v-if="row.hash && !row.current" :to="{ name: 'dat-detail', query: { hash: row.hash } }">DAT
+              &#35;{{ row.counter }}</NuxtLink>
 
             <span v-if="!row.hash">not minted yet</span>
-
           </template>
 
-          <!--show this "UploadFillec" icon only if the doesnt exist yet-->
           <template v-if="!row.hash" #icon>
             <UploadFilled />
+          </template>
+          <template else #icon>
+            <Check />
           </template>
 
         </el-step>
@@ -161,7 +164,8 @@ import moment from 'moment';
 import { slots } from '@gnyio/utils';
 import axios from 'axios';
 import * as webEd from '@gnyio/web-ed';
-import { Edit, Picture, UploadFilled, Upload, Check } from '@element-plus/icons-vue'
+import * as gnyClient from '@gnyio/client';
+import { UploadFilled, Check, Close, QuestionFilled } from '@element-plus/icons-vue'
 
 const custom_title = computed(() => {
   if (data.value && typeof data.value.dat.name === 'string') {
@@ -186,19 +190,6 @@ const routeQuery = computed(() => route.query)
 const connection = useFoo();
 
 const { data, error, status } = await useAsyncData(async () => {
-
-  // showError: false,
-  // errorText: '',
-
-  // showSuccess: false,
-  // successText: '',
-  // buttonLoading: false,
-
-  // dat: {},
-  // datMaker: {},
-  // nextHash: {},
-  // rows: [],
-
 
   const query = routeQuery.value;
   console.log(`reactive query: ${JSON.stringify(query, null, 2)}`);
@@ -297,10 +288,6 @@ const { data, error, status } = await useAsyncData(async () => {
 });
 
 
-// for dats
-const showError = ref(false);
-const showSuccess = ref(false);
-const buttonLoading = ref(false);
 
 
 async function copyName() {
@@ -327,96 +314,104 @@ async function copyDatUrl() {
   }
 }
 
-// async function verify() {
-//   this.buttonLoading = true;
-
-//   console.log('verifing DAT...');
-
-//   let result = null;
-//   try {
-//     console.log(`url: ${this.dat.url}`);
-
-//     result = await axios.request({
-//       method: 'GET',
-//       url: this.dat.url,
-//       maxRedirects: 0, // do not redirect
-//       // responseType: 'json',
-//       crossDomain: true,
-//       timeout: 5000,
-//     });
-//     console.log('finished request');
-//   } catch (err) {
-
-//     // error happens if domain does not exist or file can't be found
-//     console.log('error during fetching json data (dat-detail)');
-//     console.log(err);
-
-//     this.showError = true;
-//     this.errorText = 'File not found!';
-
-//     // todo: show Notification popup
-//     this.buttonLoading = false;
-//     return;
-//   }
-
-//   console.log('after try block');
+// for dats
+const showError = ref(false);
+const errorText = ref('');
+const showSuccess = ref(false);
+const buttonLoading = ref(false);
+const successText = ref('');
 
 
-//   // validate structure of data
-//   const validationResult = gnyClient.schemas.datSchema.validate(result.data);
-//   if (!validationResult.result) {
-//     this.showError = true;
-//     this.errorText = 'Data is not in correct format';
-//     this.buttonLoading = false;
-//     return;
-//   }
+async function verify() {
+  buttonLoading.value = true;
 
-//   if (result.data.hash) { // is DATsha256
-//     const data = result.data.data;
-//     const hash = result.data.hash;
+  console.log('verifing DAT...');
 
-//     const ownHash = webEd.createSha256Hash(data);
-//     if (hash !== ownHash) {
-//       this.showError = true;
-//       this.errorText = 'Data does not match the provided Hash!';
-//       this.buttonLoading = false;
-//       return;
-//     } else {
-//       this.showSuccess = true;
-//       this.successText = 'Hashes are matching! Data has not changed.';
-//       this.buttonLoading = false;
-//       return;
-//     }
-//   } else { // is DATEd25519
-//     const data = result.data.data;
-//     const publicKey = result.data.publicKey;
-//     const signature = result.data.signature;
-//     try {
-//       const result = gnyClient.verification.MessageWebBase.verify(
-//         data,
-//         signature,
-//         publicKey
-//       );
-//       if (result) {
-//         ths.showSuccess = true;
-//         this.successText = 'Signature is correct. Data wasn\'t tampered with';
-//         this.buttonLoading = false;
-//         return;
-//       } else {
-//         this.showError = true;
-//         this.errorText = 'ed25519 signature does not match';
-//         this.buttonLoading = false;
-//         return;
-//       }
-//     } catch (err) {
-//       this.showError = true;
-//       this.errorText = 'ed25519 not in correct format';
-//       this.buttonLoading = false;
-//       return;
-//     }
-//   }
+  const datUrl = data?.value?.dat.url || '';
 
-// }
+  let result = null;
+  try {
+    result = await axios.request({
+      method: 'GET',
+      url: datUrl,
+      maxRedirects: 0, // do not redirect
+      // responseType: 'json',
+      crossDomain: true,
+      timeout: 5000,
+    });
+    console.log('finished request');
+  } catch (err) {
+
+    // error happens if domain does not exist or file can't be found
+    console.log('error during fetching json data (dat-detail)');
+    console.log(err);
+
+    showError.value = true;
+    errorText.value = 'File not found!';
+
+    // todo: show Notification popup
+    buttonLoading.value = false;
+    return;
+  }
+
+  console.log('after try block');
+
+
+  // validate structure of data
+  const validationResult = gnyClient.schemas.datSchema.validate(result.data);
+  if (!validationResult.result) {
+    showError.value = true;
+    errorText.value = 'Data is not in correct format';
+    buttonLoading.value = false;
+    return;
+  }
+
+  if (result.data.hash) { // is DATsha256
+    const data = result.data.data;
+    const hash = result.data.hash;
+
+    const ownHash = webEd.createSha256Hash(data);
+    if (hash !== ownHash) {
+      showError.value = true;
+      errorText.value = 'Data does not match the provided Hash!';
+      buttonLoading.value = false;
+      return;
+    } else {
+      showSuccess.value = true;
+      successText.value = 'Hashes are matching! Data has not changed.';
+      buttonLoading.value = false;
+      return;
+    }
+  } else { // is DATEd25519
+    const data = result.data.data;
+    const publicKey = result.data.publicKey;
+    const signature = result.data.signature;
+    try {
+      const result = gnyClient.verification.MessageWebBase.verify(
+        data,
+        signature,
+        publicKey
+      );
+      if (result) {
+        showSuccess.value = true;
+        successText.value = 'Signature is correct. Data wasn\'t tampered with';
+        buttonLoading.value = false;
+        return;
+      } else {
+        showError.value = true;
+        errorText.value = 'ed25519 signature does not match';
+        buttonLoading.value = false;
+        return;
+      }
+    } catch (err) {
+      showError.value = true;
+      errorText.value = 'ed25519 not in correct format';
+      buttonLoading.value = false;
+      return;
+    }
+  }
+
+}
 
 function timestamp2date(timestamp: number) {
     return moment.utc(slots.getRealTime(timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
@@ -441,12 +436,9 @@ function ordinal(text: string) {
   return `${text}th`;
 }
 
-
-const { width } = useWindowSize();
-
 </script>
 
-<style scoped>
+<style>
 .card-title {
   margin-bottom: 0.75rem;
   font-size: 1.5rem;
@@ -507,4 +499,11 @@ p {
   font-size: 12px;
   font-weight: 300;
 }
+
+.custom-button {
+  width: 100px !important;
+  height: 100px !important;
+  font-size: 80px;
+}
+
 </style>
