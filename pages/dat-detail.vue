@@ -26,7 +26,7 @@
           <p>
             <NuxtLink :to="{ name: 'dat-detail', query: { hash: data.dat.previousHash } }">{{
               data.dat.previousHash.slice(0, 16)
-            }}</NuxtLink>
+              }}</NuxtLink>
           </p>
         </div>
         <div v-else>
@@ -53,7 +53,7 @@
           <p v-if="data">
             <NuxtLink :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{
               data.dat.datMakerId
-            }}</NuxtLink>
+              }}</NuxtLink>
           </p>
         </div>
 
@@ -71,7 +71,7 @@
           <p v-if="data">
             <NuxtLink :to="{ name: 'account-detail', query: { address: data.dat.ownerAddress } }">{{
               data.dat.ownerAddress
-            }}</NuxtLink>
+              }}</NuxtLink>
           </p>
         </div>
 
@@ -102,23 +102,29 @@
             <!-- v-loading="buttonLoading" -->
             <el-button @click="verify" class="custom-button" type="warning" circle>
               <template #icon>
-                  <QuestionFilled />
+                <QuestionFilled />
               </template>
             </el-button>
           </el-tooltip>
 
-          <!-- <el-tooltip v-if="showError" effect="dark" placement="bottom">
+          <el-tooltip v-if="showError" effect="dark" placement="bottom">
             <template #content>{{ errorText }}</template>
-            <el-button style="font-size: 53px;" v-if="showError === true" type="danger" :icon="Close"
-              circle></el-button>
+            <el-button class="custom-button" v-if="showError === true" type="danger" circle>
+              <template #icon>
+                <Close />
+              </template>
+            </el-button>
           </el-tooltip>
 
           <el-tooltip v-if="showSuccess" effect="dark" placement="bottom">
             <template #content>{{ successText }}</template>
 
-            <el-button style="font-size: 53px;" v-if="showSuccess === true" type="success" :icon="Check"
-              circle></el-button>
-          </el-tooltip> -->
+            <el-button class="custom-button" v-if="showSuccess === true" type="success" circle>
+              <template #icon>
+              <Check />
+              </template>
+            </el-button>
+          </el-tooltip>
         </div>
 
       </div>
@@ -132,7 +138,8 @@
 
       <el-steps simple v-if="data">
 
-        <el-step v-for="row in data.rows" :status="typeof row.hash === 'string' ? 'success' : 'wait'" v-bind:key="row.counter">
+        <el-step v-for="row in data.rows" :status="typeof row.hash === 'string' ? 'success' : 'wait'"
+          v-bind:key="row.counter">
           <template #title>
             <span v-if="row.hash && row.current">
               <strong>DAT &#35;{{ row.counter }}</strong>
@@ -166,6 +173,7 @@ import axios from 'axios';
 import * as webEd from '@gnyio/web-ed';
 import * as gnyClient from '@gnyio/client';
 import { UploadFilled, Check, Close, QuestionFilled } from '@element-plus/icons-vue'
+import * as crypto from 'crypto';
 
 const custom_title = computed(() => {
   if (data.value && typeof data.value.dat.name === 'string') {
@@ -414,13 +422,13 @@ async function verify() {
 }
 
 function timestamp2date(timestamp: number) {
-    return moment.utc(slots.getRealTime(timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
+  return moment.utc(slots.getRealTime(timestamp)).format('YYYY-MM-DD HH:mm:ss UTC');
 }
 
 function ordinal(text: string) {
   const str = String(text);
   const lastChar = str[str.length - 1];
-  
+
   if (str === '11') return '11th';
   if (str === '12') return '12th';
   if (str === '13') return '13th';
@@ -428,7 +436,7 @@ function ordinal(text: string) {
   if (str === '1') return `${text}st`
   if (str === '2') return `${text}nd`;
   if (str === '3') return `${text}rd`;
-  
+
   if (lastChar === '1') return `${text}st`;
   if (lastChar === '2') return `${text}nd`;
   if (lastChar === '3') return `${text}rd`;
@@ -505,5 +513,4 @@ p {
   height: 100px !important;
   font-size: 80px;
 }
-
 </style>
