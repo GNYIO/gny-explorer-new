@@ -4,71 +4,44 @@
             <el-col><span class="current_network">{{ network.toUpperCase() }}</span></el-col>
         </el-row>
 
-        <el-container>
-            <el-aside width="100px">
+        <el-row :gutter="24">
+            <el-col :span="2">
+                <nuxt-link to="/">
+                    <img src="~/assets/logo.png" alt="logo" class="logo">
+                </nuxt-link>
+            </el-col>
+            <el-col :span="20">
+            </el-col>
+            <el-col :span="2">
+                <el-button :icon="Grid" @click="dialogVisible = !dialogVisible" circle size="large" />
+            </el-col>
+        </el-row>
+
+
+        <el-dialog v-model="dialogVisible" :fullscreen="width < 500" top="40vh" width="70%">
+            <template #header>
                 <img src="~/assets/logo.png" alt="logo" class="logo">
-            </el-aside>
+            </template>
 
-            <el-aside width="100px">
-                <el-button :icon="Grid" circle />
-            </el-aside>
-        </el-container>
+            <template #default>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/blocks" class="second-link">Blocks</nuxt-link>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/transactions" class="second-link">Transactions</nuxt-link>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/delegates" class="second-link">Delegates</nuxt-link>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/assets" class="second-link">Assets</nuxt-link>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/burnings" class="second-link">Burnings</nuxt-link>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/dats" class="second-link">Dats</nuxt-link>
+                <nuxt-link @click="dialogVisible = !dialogVisible" to="/peers" class="second-link">Peers</nuxt-link>
+
+                <!-- <Search /> -->
+
+            </template>
+        </el-dialog>
 
 
-        <!-- <el-header class="header">
-            <b-navbar toggleable="lg" variant="secondary" class="bg-transparent">
-                <b-navbar-brand>
-                    <nuxt-link to="/">
-                        <img src="~/assets/logo.png" alt="logo" class="logo">
-                    </nuxt-link>
-                </b-navbar-brand>
-
-                <b-navbar-toggle target="nav_collapse">
-                    <template #default="{ expanded }">
-                        <svg style="display: inline-block; width: 1.5em; height: 1.5em; vertical-align: middle; content: ''; background: no-repeat center center; background-image: none; background-size: auto; background-size: 100% 100%;"
-                            xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'>
-                            <path stroke='rgba(0, 0, 0, 0.5)' stroke-linecap='round' stroke-miterlimit='10'
-                                stroke-width='2' d='M4 7h22M4 15h22M4 23h22' />
-                        </svg>
-                    </template>
-                </b-navbar-toggle>
-
-                <b-collapse is-nav id="nav_collapse">
-                    <b-navbar-nav>
-                        <b-nav-item>
-                            <nuxt-link to="/blocks" class="second-link">BLOCKS</nuxt-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <nuxt-link to="/transactions" class="second-link">TRS</nuxt-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <nuxt-link to="/delegates" class="second-link">DELEGATES</nuxt-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <nuxt-link to="/assets" class="second-link">ASSETS</nuxt-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <nuxt-link to="/burnings" class="second-link">BURNINGS</nuxt-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <nuxt-link to="/dats" class="second-link">DATS</nuxt-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <nuxt-link to="/peers" class="second-link">PEERS</nuxt-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-
-                    <b-navbar-nav class="ml-auto">
-                        <Search />
-                    </b-navbar-nav>
-                </b-collapse>
-            </b-navbar>
-        </el-header> -->
         <el-alert title="Network is down." type="warning" v-if="error" show-icon>
         </el-alert>
         <el-main>
-            <nuxt />
-
+            <NuxtPage />
         </el-main>
         <el-footer>
             © 2025 by gny.io Limited
@@ -81,6 +54,8 @@ const config = useConfig();
 const network = ref(config.value.network);
 import { Grid } from '@element-plus/icons-vue'
 
+
+const dialogVisible = ref(false);
 
 const connection = useFoo();
 
@@ -97,6 +72,9 @@ const { data, error, status } = await useAsyncData(async () => {
     lazy: true,
 });
 
+
+const { width } = useWindowSize();
+
 </script>
 
 <style>
@@ -108,6 +86,14 @@ body {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
+}
+
+.card-title {
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
 }
 
 .el-main {
@@ -158,6 +144,9 @@ a {
 
 .second-link {
     margin-left: 7px;
+    display: block;
+    font-size: 20px;
+    margin-top: 0.5rem;
 }
 
 .logo {
