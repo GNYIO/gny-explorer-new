@@ -18,22 +18,21 @@
         </el-row>
 
 
-        <el-dialog v-model="dialogVisible" :fullscreen="width < 500" top="40vh" width="70%">
+        <el-dialog v-model="dialogVisible" :fullscreen="width < 600" width="70%" destroy-on-close>
             <template #header>
                 <img src="~/assets/logo.png" alt="logo" class="logo">
             </template>
 
             <template #default>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/blocks" class="second-link">Blocks</nuxt-link>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/transactions" class="second-link">Transactions</nuxt-link>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/delegates" class="second-link">Delegates</nuxt-link>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/assets" class="second-link">Assets</nuxt-link>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/burnings" class="second-link">Burnings</nuxt-link>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/dats" class="second-link">Dats</nuxt-link>
-                <nuxt-link @click="dialogVisible = !dialogVisible" to="/peers" class="second-link">Peers</nuxt-link>
+                <nuxt-link to="/blocks" class="second-link">Blocks</nuxt-link>
+                <nuxt-link to="/transactions" class="second-link">Transactions</nuxt-link>
+                <nuxt-link to="/delegates" class="second-link">Delegates</nuxt-link>
+                <nuxt-link to="/assets" class="second-link">Assets</nuxt-link>
+                <nuxt-link to="/burnings" class="second-link">Burnings</nuxt-link>
+                <nuxt-link to="/dats" class="second-link">Dats</nuxt-link>
+                <nuxt-link to="/peers" class="second-link">Peers</nuxt-link>
 
-                <!-- <Search /> -->
-
+                <Search />
             </template>
         </el-dialog>
 
@@ -55,7 +54,7 @@ const network = ref(config.value.network);
 import { Grid } from '@element-plus/icons-vue'
 
 
-const dialogVisible = ref(false);
+const dialogVisible = useState('dialog', () => false);
 
 const connection = useFoo();
 
