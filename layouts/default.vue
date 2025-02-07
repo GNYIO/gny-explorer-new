@@ -1,22 +1,16 @@
 <template>
-    <el-container>
-        <el-row class="nerwork-header">
-            <el-col><span class="current_network">{{ network.toUpperCase() }}</span></el-col>
-        </el-row>
+    <el-container class="inner">
 
-        <el-row :gutter="24">
-            <el-col :span="2">
-                <nuxt-link to="/">
-                    <img src="~/assets/logo.png" alt="logo" class="logo">
-                </nuxt-link>
-            </el-col>
-            <el-col :span="20">
-            </el-col>
-            <el-col :span="2">
-                <el-button :icon="Grid" @click="dialogVisible = !dialogVisible" circle size="large" />
-            </el-col>
-        </el-row>
+        <div>
+            <span class="floatRight">{{ network }}</span>
+        </div>
 
+        <div>
+            <nuxt-link to="/">
+                <img src="~/assets/logo.png" alt="logo" class="logo">
+            </nuxt-link>
+            <el-button class="floatRight" :icon="Grid" @click="dialogVisible = !dialogVisible" circle size="large" />
+        </div>
 
         <el-dialog v-model="dialogVisible" :fullscreen="width < 600" width="70%" destroy-on-close>
             <template #header>
@@ -49,9 +43,13 @@
 </template>
 
 <script setup lang="ts">
-const config = useConfig();
-const network = ref(config.value.network);
 import { Grid } from '@element-plus/icons-vue'
+
+
+
+const config = useConfig();
+// capitalize first letter
+const network = computed(() => config.value.network[0].toUpperCase() + config.value.network.slice(1)  );
 
 
 const dialogVisible = useState('dialog', () => false);
@@ -96,22 +94,9 @@ body {
 }
 
 .el-main {
-    padding: 0.5rem 0.5rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    padding: 0px;
 }
-
-@media screen and (min-width: 600px) {
-    .el-main {
-        padding: 1rem 1rem;
-    }
-}
-
-@media screen and (min-wdith: 800px) {
-    .el-main {
-        padding: 2rem 2rem;
-    }
-}
-
 
 a {
     text-decoration: none;
@@ -129,17 +114,27 @@ a {
     padding: 0;
 }
 
-.nerwork-header {
-    z-index: 999;
-    height: 20px;
-}
-
-/* .inner {
+.inner {
     max-width: 1000px;
     box-sizing: border-box;
     margin: 0px auto;
-    padding: 5px 5px;
-  } */
+    padding: 0px;
+}
+
+@media screen and (min-width: 600px) {
+    .inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
 
 .second-link {
     margin-left: 7px;
@@ -162,6 +157,7 @@ a {
 }
 
 .el-footer {
+    margin-top: 1rem;
     text-align: center;
     color: #acacac;
 }
@@ -169,5 +165,9 @@ a {
 .current_network {
     float: right;
     padding-right: 1.2rem;
+}
+
+.floatRight {
+    float: right;
 }
 </style>
