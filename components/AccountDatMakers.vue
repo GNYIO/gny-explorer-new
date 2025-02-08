@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card class="card-space">
         <h4 class="card-title">
             My Registered DATMakers (total: {{ data?.count || 0 }})
         </h4>
@@ -98,5 +98,9 @@ function subDes(row: any, column: any) {
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+}
+
+.card-space {
+    margin-top: 1.5rem;
 }
 </style>

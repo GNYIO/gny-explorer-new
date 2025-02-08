@@ -21,7 +21,7 @@
                         <template v-if="data" #content>{{ BigNumber(data.account.lockAmount).dividedBy(1e8).toFixed(0)
                             }} available to unlock at
                             height {{ data.account.lockHeight }}</template>
-                        <p>{{ data.account.lockAmount }} GNY</p>
+                        <p>{{ BigNumber(data.account.lockAmount).dividedBy(1e8).toFixed(0) }} GNY</p>
                     </el-tooltip>
                 </div>
                 <div>

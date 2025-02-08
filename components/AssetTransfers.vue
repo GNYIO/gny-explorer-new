@@ -1,8 +1,9 @@
 <template>
     <!--Asset Transfers-->
-    <el-card>
-        Asset Transfers (total: {{ data?.count || 0 }})
-
+    <el-card class="card-space">
+        <h4 class="card-title">
+            Asset Transfers (total: {{ data?.count || 0 }})
+        </h4>
 
         <el-table :data="data?.transfers" style="width: 100%" v-loading="status !== 'success'">
             <el-table-column prop="amount" align="center" label="Amount" :formatter="prettyPrintAmount"
@@ -150,5 +151,17 @@ const { width } = useWindowSize();
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+}
+
+.card-space {
+    margin-top: 1.5rem;
+}
+
+.card-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-top: 0;
 }
 </style>

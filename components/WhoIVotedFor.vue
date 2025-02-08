@@ -1,7 +1,7 @@
 <template>
 
 
-    <el-card>
+    <el-card class="card-space">
         <h4 class="card-title">
             {{ formatTitle }}
         </h4>
@@ -145,5 +145,9 @@ const { width } = useWindowSize();
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+}
+
+.card-space {
+    margin-top: 1.5rem;
 }
 </style>

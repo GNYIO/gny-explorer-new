@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card class="card-space">
         <h4 class="card-title">
             Custom Assets (total: {{ data?.count }})
         </h4>
@@ -99,6 +99,11 @@ const { width } = useWindowSize();
 </script>
 
 <style scoped>
+
+.card-space {
+    margin-top: 1.5rem;
+}
+
 .center-horizontally {
     margin-left: auto;
     margin-right: auto;

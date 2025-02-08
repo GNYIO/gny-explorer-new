@@ -68,7 +68,7 @@
             </div>
         </el-card>
 
-        <el-card>
+        <el-card class="card-space">
             <h4 class="card-title">
                 Transactions included in this Block
             </h4>
@@ -243,5 +243,9 @@ p {
 
 .copy-document:active path {
     fill: #000;
+}
+
+.card-space {
+    margin-top: 1.5rem;
 }
 </style>

@@ -13,7 +13,11 @@
             </div>
         </el-card>
 
-        <el-card title="All DATs" class="shadow">
+        <el-card class="card-space">
+            <h4 class="card-title">
+                All DATs
+            </h4>
+
             <el-table :data="data?.dats" stripe height="300" v-loading="status !== 'success'">
                 <el-table-column prop="name" align="center" label="Dat Name" width="auto">
                     <template #default="scope">
@@ -71,7 +75,11 @@
         </el-card>
 
 
-        <el-card title="All DAT Makers" class="shadow">
+        <el-card title="" class="card-space">
+            <h4 class="card-title">
+                All DAT Makers
+            </h4>
+
             <el-table :data="makerData?.makers" stripe height="300" v-loading="makerStatus !== 'success'">
                 <el-table-column prop="name" align="center" label="Maker Name" width="auto">
                     <template #default="scope">
@@ -173,8 +181,9 @@ const { width } = useWindowSize();
 </script>
 
 <style scoped>
-.card {
-    margin-bottom: 2rem;
+
+.card-space {
+    margin-top: 1.5rem;
 }
 
 .wrapper {

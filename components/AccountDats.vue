@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card class="card-space">
         <h4 class="card-title">
             My Registered DATs (total: {{ data?.count }})
         </h4>
@@ -105,3 +105,11 @@ const { data, error, status } = await useAsyncData(async () => {
 const { width } = useWindowSize();
 
 </script>
+
+<style scoped>
+
+.card-space {
+    margin-top: 1.5rem;
+}
+
+</style>

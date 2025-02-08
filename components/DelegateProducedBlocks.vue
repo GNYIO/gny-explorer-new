@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card class="card-space">
         <h4 v-if="data" class="card-title">
             {{ data.blockTitle }}
         </h4>
@@ -116,5 +116,9 @@ const { width } = useWindowSize();
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+}
+
+.card-space {
+    margin-top: 1.5rem;
 }
 </style>

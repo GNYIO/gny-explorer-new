@@ -130,7 +130,7 @@
       </div>
     </el-card>
 
-    <el-card>
+    <el-card class="card-space">
       <h4 class="card-title">
         DAT Chain
       </h4>
@@ -453,6 +453,10 @@ function ordinal(text: string) {
   font-weight: 500;
   line-height: 1.2;
   margin-top: 0;
+}
+
+.card-space {
+    margin-top: 1.5rem;
 }
 
 i {

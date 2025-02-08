@@ -1,12 +1,12 @@
 <template>
-  <el-card>
+  <el-card class="card-space">
     <h4 class="card-title">
       My GNY Burnings (total: {{ data?.count || 0 }})
     </h4>
 
     <el-table class="clickable-rows" :data="data?.burnings" stripe v-loading="status !== 'success'">
       <el-table-column prop="amount" align="center" label="Amount" :formatter="formatAmount"></el-table-column>
-      <el-table-column v-if="width > 300" width="75" prop="height" align="center" label="Height"></el-table-column>
+      <el-table-column v-if="width > 300" width="90" prop="height" align="center" label="Height"></el-table-column>
       <el-table-column prop="tid" align="center" width="auto" label="Transaction ID">
         <template #default="scope">
           <nuxt-link class="nuxt-link" :to="{ name: 'transaction-detail', query: { id: scope.row.tid } }">
@@ -89,5 +89,9 @@ const { width } = useWindowSize();
   margin-left: auto;
   margin-right: auto;
   width: fit-content;
+}
+
+.card-space {
+    margin-top: 1.5rem;
 }
 </style>
