@@ -22,7 +22,15 @@
                 <el-table-column prop="name" align="center" label="Dat Name" width="auto">
                     <template #default="scope">
                         <nuxt-link class="nuxt-link" :to="{ name: 'dat-detail', query: { name: scope.row.name } }">
-                            {{ scope.row.name.slice(0, 8) }}
+                            {{ scope.row.name.split('.')[1].slice(0, 7) + '...' }}
+                        </nuxt-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="datMakerId" align="center" label="Dat Maker" width="auto">
+                    <template #default="scope">
+                        <nuxt-link class="nuxt-link"
+                            :to="{ name: 'dat-maker-detail', query: { makerId: scope.row.datMakerId } }">
+                            {{ scope.row.datMakerId.slice(0, 8) }}
                         </nuxt-link>
                     </template>
                 </el-table-column>
@@ -56,14 +64,6 @@
                         <nuxt-link class="nuxt-link"
                             :to="{ name: 'account-detail', query: { address: scope.row.ownerAddress } }">
                             {{ scope.row.ownerAddress.slice(0, 6) }}
-                        </nuxt-link>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="datMakerId" align="center" label="Dat Maker" width="auto">
-                    <template #default="scope">
-                        <nuxt-link class="nuxt-link"
-                            :to="{ name: 'dat-maker-detail', query: { makerId: scope.row.datMakerId } }">
-                            {{ scope.row.datMakerId.slice(0, 8) }}
                         </nuxt-link>
                     </template>
                 </el-table-column>
@@ -181,7 +181,6 @@ const { width } = useWindowSize();
 </script>
 
 <style scoped>
-
 .card-space {
     margin-top: 1.5rem;
 }

@@ -9,15 +9,37 @@
         <div v-if="data">
           DAT Name
           <p>
-            {{ data.dat.name.slice(0, 18) }}
-            <!-- <i class="el-icon-copy-document" @click="copyName"> -->
+            {{ custom_title }}
+
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copyName" class="copy-document" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
+
           </p>
         </div>
         <div v-if="data">
           Hash
           <p>
             {{ data.dat.hash.slice(0, 16) }}
-            <!-- <i class="el-icon-copy-document" @click="copyHash"></i> -->
+
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copyHash" class="copy-document" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
+
           </p>
         </div>
 
@@ -26,7 +48,7 @@
           <p>
             <NuxtLink :to="{ name: 'dat-detail', query: { hash: data.dat.previousHash } }">{{
               data.dat.previousHash.slice(0, 16)
-              }}</NuxtLink>
+            }}</NuxtLink>
           </p>
         </div>
         <div v-else>
@@ -53,7 +75,7 @@
           <p v-if="data">
             <NuxtLink :to="{ name: 'dat-maker-detail', query: { makerId: data.dat.datMakerId } }">{{
               data.dat.datMakerId
-              }}</NuxtLink>
+            }}</NuxtLink>
           </p>
         </div>
 
@@ -71,7 +93,7 @@
           <p v-if="data">
             <NuxtLink :to="{ name: 'account-detail', query: { address: data.dat.ownerAddress } }">{{
               data.dat.ownerAddress
-              }}</NuxtLink>
+            }}</NuxtLink>
           </p>
         </div>
 
@@ -91,7 +113,17 @@
         <div>
           DAT URL <span class="grayed_out">(at your own risk)</span>
           <p v-if="data">{{ data.dat.url.slice(0, 24) }}
-            <!-- <i class="el-icon-copy-document" @click="copyDatUrl"></i> -->
+
+            <!-- svg of element-plus "CopyDocumnet" icon-->
+            <!-- got svg from https://element-plus.org/en-US/component/icon.html#icon-collection -->
+            <svg @click="copyDatUrl" class="copy-document" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+              <path fill="currentColor"
+                d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z">
+              </path>
+              <path fill="currentColor"
+                d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64">
+              </path>
+            </svg>
           </p>
         </div>
 
@@ -122,7 +154,7 @@
 
             <el-button class="custom-button" v-if="showSuccess === true" type="success" circle>
               <template #icon>
-              <Check />
+                <Check />
               </template>
             </el-button>
           </el-tooltip>
@@ -174,7 +206,6 @@ import axios from 'axios';
 import * as webEd from '@gnyio/web-ed';
 import * as gnyClient from '@gnyio/client';
 import { UploadFilled, Check, Close, QuestionFilled } from '@element-plus/icons-vue'
-import * as crypto from 'crypto';
 
 const custom_title = computed(() => {
   if (data.value && typeof data.value.dat.name === 'string') {
@@ -306,30 +337,33 @@ const { data, error, status } = await useAsyncData(async () => {
 });
 
 
-
+const { isSupported, copy } = useClipboard();
 
 async function copyName() {
-  try {
-    // await this.$copyText(this.dat.name);
-  } catch (err) {
-    console.error(err);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data?.value?.dat.name || '';
+  await copy(result);
 }
 
 async function copyHash() {
-  try {
-    // await this.$copyText(this.dat.hash);
-  } catch (err) {
-    console.error(err);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data?.value?.dat.hash || '';
+  await copy(result);
 }
 
 async function copyDatUrl() {
-  try {
-    // await this.$copyText(this.dat.url);
-  } catch (err) {
-    console.error(err);
+  if (!isSupported) {
+    console.log('copying to clipboard is ont supported');
+    return;
   }
+  const result = data?.value?.dat.url || '';
+  await copy(result);
 }
 
 // for dats
@@ -466,7 +500,7 @@ function ordinal(text: string) {
 }
 
 .card-space {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 i {
@@ -526,5 +560,23 @@ p {
   width: 100px !important;
   height: 100px !important;
   font-size: 80px;
+}
+
+
+
+.copy-document {
+  width: 20px;
+}
+
+.copy-document:hover {
+  cursor: pointer;
+}
+
+.copy-document:hover path {
+  fill: #565656;
+}
+
+.copy-document:active path {
+  fill: #000;
 }
 </style>
