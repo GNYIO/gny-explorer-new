@@ -95,7 +95,8 @@
           </p>
         </div>
 
-        <div>
+        <!-- show only button if everything is loaded-->
+        <div v-if="status === 'success'">
           <el-tooltip v-if="showError === false && showSuccess === false" effect="dark" placement="bottom">
             <template #content>Click to verify this DAT.<br /> Use at your own risk!</template>
 
@@ -198,6 +199,15 @@ const routeQuery = computed(() => route.query)
 const connection = useFoo();
 
 const { data, error, status } = await useAsyncData(async () => {
+
+  // this needs to be reset, because otherwise it still show a green
+  // check mark after we navigated to another DAT
+  showError.value = false;
+  errorText.value = '';
+  showSuccess.value = false;
+  buttonLoading.value = false;
+  successText.value = '';
+
 
   const query = routeQuery.value;
   console.log(`reactive query: ${JSON.stringify(query, null, 2)}`);
