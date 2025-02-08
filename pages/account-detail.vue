@@ -44,7 +44,7 @@
                 </div>
                 <div>
                     Public Key
-                    <p v-if="data && data.account.publicKey">{{ data.account.publicKey }}</p>
+                    <p v-if="data && data.account.publicKey">{{ data.account.publicKey.slice(0, 8) }}</p>
                     <p v-else>Not set</p>
                 </div>
                 <div>
