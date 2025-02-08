@@ -11,19 +11,18 @@ const mapping: IMapping = {
   5: 'basic.unvote',
   6: 'basic.unlock',
   10: 'basic.registerDelegate',
+  20: 'basic.burn',
+
   100: 'uia.registerIssuer',
   101: 'uia.registerAsset',
   102: 'uia.issue',
   103: 'uia.transfer',
-  201: 'ml.uploadData',
-  202: 'ml.getPrediction',
-  203: 'ml.getPredictionCategory',
-  204: 'ml.getPredictionTime',
-  205: 'ml.getPredictionLocation',
-  206: 'ml.filterOutliers',
-  207: 'ml.fraudDetection',
-  208: 'ml.locationPrediction',
-  209: 'ml.nlp',
+
+  300: 'dat.registerDatMaker',
+  301: 'dat.createDat',
+
+  400: 'verify.verify',
+
 };
 
 

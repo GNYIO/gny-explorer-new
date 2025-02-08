@@ -2,14 +2,12 @@
     <el-container class="inner">
 
         <div>
-            <span class="floatRight">{{ network }}</span>
-        </div>
-
-        <div>
             <nuxt-link to="/">
                 <img src="~/assets/logo.png" alt="logo" class="logo">
             </nuxt-link>
             <el-button class="floatRight" :icon="Grid" @click="dialogVisible = !dialogVisible" circle size="large" />
+            <span class="floatRight vertical-align">{{ network }}</span>
+
         </div>
 
         <el-dialog v-model="dialogVisible" :fullscreen="width < 600" width="70%" destroy-on-close>
@@ -169,5 +167,11 @@ a {
 
 .floatRight {
     float: right;
+}
+
+.vertical-align {
+    position: relative;
+    top: 0.6rem;
+    margin-right: 1rem;
 }
 </style>

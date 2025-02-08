@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import BigNumber from 'bignumber.js';
-import type { DelegateViewModel, IAccount, IBlock } from '@gnyio/interfaces';
+import type { DelegateViewModel, IAccount } from '@gnyio/interfaces';
 import type { LocationQueryValue } from 'vue-router';
 import DelegateProducedBlocks from '~/components/DelegateProducedBlocks.vue';
 

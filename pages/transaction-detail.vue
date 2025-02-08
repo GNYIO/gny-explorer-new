@@ -250,7 +250,6 @@ import moment from 'moment';
 import { isAddress, slots } from '@gnyio/utils';
 import BigNumber from 'bignumber.js';
 import type { ITransaction } from '@gnyio/interfaces';
-import type { TableColumnCtx } from 'element-plus';
 
 
 const connection = useFoo();
