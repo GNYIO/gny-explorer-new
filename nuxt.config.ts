@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      gnyEndpoint: "testnet.gny.io",
+      gnyEndpoint: "testnet.gny.io", // overwrite with: NUXT_PUBLIC_GNY_ENDPOINT= in .env
       gnyPort: "80",
       gnyNetwork: "testnet",
       gnyHttps: "true",
@@ -22,5 +22,8 @@ export default defineNuxtConfig({
     plugins: [
       nodePolyfills(),
     ],
-  }
-})
+  },
+  telemetry: false,
+  // https://github.com/nuxt/nuxt/issues/30461#issuecomment-2572616714
+  experimental: { appManifest: false },
+});
