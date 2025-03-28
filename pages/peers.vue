@@ -12,6 +12,14 @@
                 <el-table-column prop="system.lastBlock.height" label="height"></el-table-column>
                 <el-table-column prop="system.lastBlock.behind" label="behind"></el-table-column>
             </el-table>
+
+            <el-table :data="data?.failedPeers" stripe v-loading="status !== 'success'"  v-if="status === 'success'" :show-header="false" >
+                <el-table-column prop="publicIp" label="IP"></el-table-column>
+                <el-table-column prop="p2p" label="p2p version"></el-table-column>
+                <el-table-column prop="version" label="version"></el-table-column>
+                <el-table-column prop="height" label="height"></el-table-column>
+                <el-table-column prop="behind" label="behind"></el-table-column>
+            </el-table>
         </el-card>
 
         <!-- <el-card class="shadow mt-4">
@@ -41,8 +49,11 @@ const { data, error, status } = await useAsyncData(async () => {
         return new BigNumber(a.system.lastBlock.height).lt(b.system.lastBlock.height);
     });
 
+    console.log(result.failedPeers);
+
     return {
         peersList: result.peersList,
+        failedPeers: result.failedPeers,
     };
 }, {
     lazy: true,

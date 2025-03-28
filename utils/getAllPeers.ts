@@ -5,6 +5,7 @@ const result = {
     visNodes: [],
     visEdges: [],
     peersList: [],
+    failedPeers: [],
 };
 
 async function getNode(ip: String, port: Number, network: NetworkType, https: boolean) {
@@ -103,6 +104,16 @@ async function getRoot(ip: String, port: Number, network: NetworkType, https: Bo
         try {
             const request = await getNode(one.simple.host, Number(one.simple.port) -1, network, false);
             stripInfo(request);
+
+            if (!request.success) {
+                result.failedPeers.push({
+                    publicIp: one.simple.host,
+                    p2p: 'failed',
+                    version: '',
+                    height: '',
+                    behind: '',
+                });
+            }
         } catch (err) {
             console.log(`error while trying to reach: "${one.simple.host}"`);
         }
