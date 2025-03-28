@@ -8,10 +8,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      gnyEndpoint: "testnet.gny.io", // overwrite with: NUXT_PUBLIC_GNY_ENDPOINT= in .env
-      gnyPort: "80",
-      gnyNetwork: "testnet",
-      gnyHttps: "true",
+      gnyEndpoint: "", // overwrite with: NUXT_PUBLIC_GNY_ENDPOINT= in .env
+      gnyPort: "",     // overwrite with: NUXT_PUBLIC_GNY_PORT= in .env
+      gnyNetwork: "",  // overwrite with: NUXT_PUBLIC_GNY_NETWORK= in .env
+      gnyHttps: "",    // overwrite with: NUXT_PUBLIC_GNY_HTTPS= in .env
     }
   },
   modules: [
