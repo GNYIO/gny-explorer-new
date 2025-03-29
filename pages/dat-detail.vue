@@ -203,7 +203,16 @@
 import moment from 'moment';
 import { slots } from '@gnyio/utils';
 import axios from 'axios';
-import * as webEd from '@gnyio/web-ed';
+
+async function createSha256Hash(message: string, algo = 'SHA-256') {
+  return Array.from(
+    new Uint8Array(
+      await crypto.subtle.digest(algo, new TextEncoder().encode(message))
+    ),
+    (byte) => byte.toString(16).padStart(2, '0')
+  ).join('');
+}
+
 import * as gnyClient from '@gnyio/client';
 import { UploadFilled, Check, Close, QuestionFilled } from '@element-plus/icons-vue'
 
@@ -422,7 +431,7 @@ async function verify() {
     const data = result.data.data;
     const hash = result.data.hash;
 
-    const ownHash = webEd.createSha256Hash(data);
+    const ownHash = await createSha256Hash(data);
     if (hash !== ownHash) {
       showError.value = true;
       errorText.value = 'Data does not match the provided Hash!';
